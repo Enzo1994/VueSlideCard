@@ -6,6 +6,7 @@
 
 <script>
 import interactjs from "interactjs";
+import { eventBus } from "../util/event-bus";
 export default {
   props: {
     card: {
@@ -50,12 +51,12 @@ export default {
             position = { x: 0, y: 0 };
             event.target.style.transition = `.5s all ease`;
             event.target.style.transform = ``;
-          } else if (position.x > 100) _this.emitStatus("like");
-          else if (position.x < -100) {
-            position = { x: 0, y: 0 };
+          } else if (position.x > 100) {
+            _this.emitStatus("like");
+            position = _this.resetPosition();
+          } else if (position.x < -100) {
             _this.emitStatus("dislike");
-            event.target.style.transform = ``;
-            event.target.classList.add("cardsup");
+            position = _this.resetPosition();
           }
         }
       }
@@ -65,14 +66,20 @@ export default {
     move(event) {
       position.x += event.dx;
       position.y += event.dy;
-      console.log(position.x, position.y);
       if (position.y % 1 == 0) {
-        event.target.style.transform = `translate3D(${position.x}px,0,0)`;
+        event.target.style.transform = `translate3D(${position.x}px,${
+          position.y
+        }px,0) rotateZ(${position.x / 10}deg)`;
       }
     },
+    resetPosition() {
+      event.target.style.transform = ``;
+      event.target.classList.add("cardsup");
+      return { x: 0, y: 0 };
+    },
     emitStatus(status) {
-      console.log(status);
-      this.$emit("emitStatus", status);
+      this.resetPosition();
+      eventBus.$emit("emit-status", status);
     }
   }
 };
@@ -83,9 +90,10 @@ export default {
   width: 80%;
   height: 80%;
   border-radius: 8px;
-  /* box-shadow: 5px 5px 20px #333; */
+  box-shadow: 5px 5px 20px #333;
 }
 .card-singlecard__first-card {
+  top: 30px;
   background-color: #4158d0;
   background-image: linear-gradient(
     43deg,
@@ -95,9 +103,11 @@ export default {
   );
 }
 .card-singlecard:nth-child(2) {
+  top: 60px;
   background: #5049b4;
 }
 .card-singlecard:nth-child(3) {
+  top: 90px;
   background: #37387c;
 }
 .draggable {
