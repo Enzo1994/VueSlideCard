@@ -1,6 +1,6 @@
 <template>
-  <div class="card-singlecard">
-    <h1>{{card.id}}</h1>
+  <div class="card-singlecard draggable" :class="card[1]==0?'card-singlecard__first-card':''">
+    <h1>{{card[0].id}}</h1>
   </div>
 </template>
 
@@ -9,11 +9,72 @@ import interactjs from "interactjs";
 export default {
   props: {
     card: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
-  mounted() {}
+  data() {
+    return {
+      topCardPosition: {
+        x: 0,
+        y: 0
+      }
+    };
+  },
+  mounted() {
+    // target elements with the "draggable" class
+    const _this = this;
+    const _doc = document;
+    let position = { x: 0, y: 0 };
+    interactjs(".draggable").draggable({
+      listeners: {
+        start(event) {
+          console.log(event.type, event.target);
+          event.target.style.transition = ``;
+          event.target.classList.remove("cardsup");
+        },
+        move(event) {
+          position.x += event.dx;
+          position.y += event.dy;
+
+          event.target.style.transform = `translate3D(${position.x}px,${
+            position.y
+          }px,0) rotateZ(${position.x / 10}deg)`;
+        },
+        end(event) {
+          console.log(event, position.x, position.y);
+          if (
+            (-50 <= position.x && position.x <= 50) ||
+            (-50 <= position.y && position.y <= 50)
+          ) {
+            position = { x: 0, y: 0 };
+            event.target.style.transition = `.5s all ease`;
+            event.target.style.transform = ``;
+          } else if (position.x > 100) _this.emitStatus("like");
+          else if (position.x < -100) {
+            position = { x: 0, y: 0 };
+            _this.emitStatus("dislike");
+            event.target.style.transform = ``;
+            event.target.classList.add("cardsup");
+          }
+        }
+      }
+    });
+  },
+  methods: {
+    move(event) {
+      position.x += event.dx;
+      position.y += event.dy;
+      console.log(position.x, position.y);
+      if (position.y % 1 == 0) {
+        event.target.style.transform = `translate3D(${position.x}px,0,0)`;
+      }
+    },
+    emitStatus(status) {
+      console.log(status);
+      this.$emit("emitStatus", status);
+    }
+  }
 };
 </script>
 <style scoped>
@@ -21,8 +82,10 @@ export default {
   position: absolute;
   width: 80%;
   height: 80%;
-  left: 50%;
-  transform: translateX(-50%);
+  border-radius: 8px;
+  /* box-shadow: 5px 5px 20px #333; */
+}
+.card-singlecard__first-card {
   background-color: #4158d0;
   background-image: linear-gradient(
     43deg,
@@ -30,31 +93,29 @@ export default {
     #c850c0 46%,
     #ffcc70 100%
   );
-  background-image: -webkit-linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
-  background-image: -moz-linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
-  background-image: -o-linear-gradient(
-    43deg,
-    #4158d0 0%,
-    #c850c0 46%,
-    #ffcc70 100%
-  );
-  border-radius: 8px;
-  box-shadow: 5px 5px 20px #333;
 }
 .card-singlecard:nth-child(2) {
   background: #5049b4;
 }
 .card-singlecard:nth-child(3) {
   background: #37387c;
+}
+.draggable {
+  touch-action: none;
+  user-select: none;
+}
+.cardsup {
+  animation: removeCard 0.5s ease 1;
+}
+
+@keyframes removeCard {
+  from {
+    top: 60px;
+    transform: scale(0.9, 0.9);
+  }
+  to {
+    top: 30px;
+    transform: scale(1, 1);
+  }
 }
 </style>
