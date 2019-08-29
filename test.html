@@ -1,0 +1,36 @@
+<head>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .single-card{
+            position: absolute;
+            width: 100px;
+            height:100px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="single-card"></div>
+</body>
+<script>
+    const card = document.querySelector('.single-card');
+    card.addEventListener('mousedown',function(e){
+        e = e || window.event;
+        const mouseLeftDist = e.clientX-card.offsetLeft;
+        const mouseTopDist = e.clientY-card.offsetTop;
+        const mouseUpHandler = (event)=>{
+            this.style.left =event.clientX - mouseLeftDist + 'px';
+            this.style.top = event.clientY - mouseTopDist + 'px';
+            this.style.transform = 'rotateZ('+(event.clientX - mouseLeftDist)/10+'deg)'
+        }
+        document.addEventListener('mousemove',mouseUpHandler)
+        document.addEventListener('mouseup',()=>{
+            this.removeEventListener('mousemove',mouseUpHandler)
+        })
+    })
+</script>
