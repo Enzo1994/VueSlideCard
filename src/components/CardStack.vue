@@ -3,7 +3,6 @@
     <SingleCard
       v-for="(item,index) in shownCards"
       :card="[item,index]"
-      :key="index"
       :style="{'transform':'scale('+(1-(index*0.1))+','+(1-(index*0.1))+')','z-index':-1000-index*10}"
     ></SingleCard>
   </div>
