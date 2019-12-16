@@ -22,6 +22,7 @@ Vue.use(SlideCard)
       >
     
       <template slot-scope="data">
+        <!-- 这里是您的卡片内容,通过作用域插槽data.cardData获取当前卡片数据 -->
           <div class="card-wrapper" style="width:100%;height:100%">
             <h1>{{ data.cardData.text }}</h1>
         </div>
