@@ -57,8 +57,7 @@ export default {
 };
 
 ```
-<iframe height=500 width=500 src="./test.gif">
-
+![image](https://github.com/Enzo1994/VueSlideCard/blob/master/test.gif)
 # 传递属性:
 |属性名称|属性作用|属性类型|举例|
 |--|--|--|--|
