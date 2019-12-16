@@ -57,6 +57,8 @@ export default {
 };
 
 ```
+<iframe height=500 width=500 src="./test.gif">
+
 # 传递属性:
 |属性名称|属性作用|属性类型|举例|
 |--|--|--|--|
