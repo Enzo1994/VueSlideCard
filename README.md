@@ -57,7 +57,7 @@ export default {
 };
 
 ```
-![img](https://github.com/Enzo1994/VueSlideCard/blob/master/test.gif)
+![test.gif](https://i.loli.net/2019/12/16/bPlCLyrpjnV8KWg.gif)
 # 传递属性:
 |属性名称|属性作用|属性类型|举例|
 |--|--|--|--|
