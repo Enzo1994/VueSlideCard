@@ -1,11 +1,9 @@
-# VueCard
+# SlideCard
 一个vue的翻动卡片小组件
-
-# 使用：
 
 # 示例：
 ```html
-<cards
+<slide-card
       :width="250"
       :height="400"
       @cardsEmptyHandler="cardsEmptyHandler"
@@ -13,19 +11,9 @@
       :arr="arr"
     >
       <template slot-scope="data">
-<!--             把卡片您想在卡片里展示的内容在这里写,使用作用域插槽 -->
-        <div class="card-wrapper" style="width:100%;height:100%">
-          <div class="cover">
-            <img
-              :src="`http://localhost:8081/html/images` + data.cardData.url"
-              alt=""
-            />
-          </div>
-          <h2>{{ data.cardData.album }}</h2>
-          <h4>{{ data.cardData.artist }}</h4>
-        </div>
+            <!-- 把卡片您想在卡片里展示的内容在这里写,使用作用域插槽 -->
       </template>
-    </cards>
+</slide-card>
 ```
 ```javascript
 ...
