@@ -3,7 +3,7 @@
 
 # 使用
 ```js
-import SlideCard from '../components/src/index';
+import SlideCard from './src/index';
 
 Vue.use(SlideCard)
 ```
