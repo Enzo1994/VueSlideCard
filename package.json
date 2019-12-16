@@ -24,9 +24,13 @@
   },
   "homepage": "https://github.com/Enzo1994/VueCard#readme",
   "devDependencies": {
-    "@vue/cli-service-global": "^3.10.0"
+    "@vue/cli-service-global": "^3.10.0",
+    "node-sass": "^4.13.0"
   },
   "dependencies": {
-    "interactjs": "^1.5.4"
+    "interactjs": "^1.5.4",
+    "sass-loader": "^8.0.0",
+    "scss-loader": "^0.0.1",
+    "vue": "^2.6.11"
   }
 }
