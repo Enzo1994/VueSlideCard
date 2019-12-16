@@ -9,30 +9,52 @@ Vue.use(SlideCard)
 ```
 
 # 示例：
-```html
-<slide-card
+```vue
+<template>
+  <div class="container">
+
+    <slide-card
       :width="250"
       :height="400"
        :cardContentArray="arr"
-       :keyfield=" 'id' "
       @cardsEmptyHandler="cardsEmptyHandler"
       @removeCardHandler="removeCardHandler"
-    >
+      >
+    
       <template slot-scope="data">
-            <!-- 把卡片您想在卡片里展示的内容在这里写,使用作用域插槽 -->
+          <div class="card-wrapper" style="width:100%;height:100%">
+            <h1>{{ data.cardData.text }}</h1>
+        </div>
       </template>
-</slide-card>
-```
-```javascript
-...
-methods:{
-      cardsEmptyHandler() {
-            console.log("卡槽空了");
-      },
-      removeCardHandler(removedCard) {
-            console.log(removedCard);
-      }
-}
+    </slide-card>
+  </div>
+</template>
+<script>
+import Vue from 'Vue'
+import SlideCard from './src/index'
+Vue.use(SlideCard)
+
+export default {
+  data() {
+    return {
+      arr: [
+        { id:1,text:'这是第二张卡片',backgroundImage:' linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);'},
+        { id:2,text:'这是第二张卡片',backgroundImage:' linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);'},
+        { id:3,text:'这是第二张卡片',backgroundImage:' linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);'},
+        { id:4,text:'这是第二张卡片',backgroundImage:' linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);'},
+      ]
+    };
+  },
+
+  methods: {
+    cardsEmptyHandler() {
+      console.log("卡槽空了");
+    },
+    removeCardHandler(params) {
+      console.log(params);
+    }
+  }
+};
 
 ```
 # 传递属性:
