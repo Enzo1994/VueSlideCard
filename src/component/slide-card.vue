@@ -5,7 +5,6 @@
   >
     <div
       class="vue-slidecards-item"
-      :class="initFinished ? '' : 'init-position'"
       v-for="(cardContent,index) in cardContentArray.slice(0,3)"
       ref="cardItem"
     >
@@ -36,11 +35,6 @@ export default {
     }
   },
   
-  data() {
-    return {
-      initFinished: false,
-    };
-  },
 
   watch: {
     cardContentArray: {
@@ -53,9 +47,6 @@ export default {
   },
   mounted() {
     console.log(this.keyField);
-    setTimeout(() => {
-      this.initFinished = true;
-    }, 0);
     if (document.querySelector(".vue-slidecards-item img")) {
       document.querySelector(".vue-slidecards-item img").draggable = false;
     }
@@ -143,35 +134,22 @@ export default {
   z-index: 99;
   transform: scale(1, 1);
 }
-.vue-slidecards-item:nth-child(1).init-position {
-  transform: translateY(-1500px);
-}
 
 .vue-slidecards-item:nth-child(2) {
   top: 18px;
   z-index: 98;
   transform: scale(0.9, 0.9);
 }
-.vue-slidecards-item:nth-child(2).init-position {
-  transform: translateY(-1000px);
-}
-
 .vue-slidecards-item:nth-child(3) {
   top: 36px;
   z-index: 97;
   transform: scale(0.8, 0.8);
-}
-.vue-slidecards-item:nth-child(3).init-position {
-  transform: translateY(-500px);
 }
 
 .vue-slidecards-item:nth-child(4) {
   top: 54px;
   z-index: 96;
   transform: scale(0.7, 0.7);
-}
-.vue-slidecards-item:nth-child(4).init-position {
-  transform: translateY(0px);
 }
 
 .vue-slidecards {
