@@ -1,6 +1,9 @@
 # SlideCard
 一个vue的翻动卡片小组件
 
+# 演示：
+https://enzo1994.github.io/indianmifan/slideCard/ （科学上网访问）
+
 # 使用
 ```js
 import SlideCard from './src/index';
