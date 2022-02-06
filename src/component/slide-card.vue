@@ -5,10 +5,11 @@
   >
     <div
       class="vue-slidecards-item"
-      v-for="(cardContent,index) in cardContentArray.slice(0,3)"
+      v-for="cardData in cardContentArray.slice(0, 3)"
+      :key="cardData.id"
       ref="cardItem"
     >
-      <slot :cardData="cardContent"></slot>
+      <slot :cardData="cardData"></slot>
     </div>
   </div>
 </template>
@@ -19,100 +20,85 @@ export default {
   props: {
     cardContentArray: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     keyField: {
       type: String,
-      default: "key"
+      default: "key",
     },
     width: {
       type: Number,
-      default: 300
+      default: 300,
     },
     height: {
       type: Number,
-      default: 500
-    }
-  },
-  
-
-  watch: {
-    cardContentArray: {
-      handler: function(newVal, oldVal) {
-        if (newVal.length == 0) {
-          this.$emit("cardsEmptyHandler");
-        }
-      }
-    }
+      default: 500,
+    },
   },
   mounted() {
-    console.log(this.keyField);
-    if (document.querySelector(".vue-slidecards-item img")) {
-      document.querySelector(".vue-slidecards-item img").draggable = false;
-    }
-    this.onMouseMove();
+    const img = document.querySelector(".vue-slidecards-item img");
+    img && (img.draggable = false);
+
+    this.mouseDownHandler();
   },
   methods: {
-    cl(p){
-      console.log(p);
-    },
-    onMouseMove() {
+    mouseDownHandler() {
       const el = this.$refs.cardItem[0];
-      const _this = this;
+      if (!el) return;
       let prevClientX = 0;
       let prevClientY = 0;
       let position = { x: 0, y: 0 };
-
-      const mouseMoveHandler = function(e) {
+      const mouseMoveHandler = (e) => {
         position.x = e.clientX - prevClientX;
         position.y = e.clientY - prevClientY;
         el.style.transform = `translate3D(${position.x}px,${
           position.y
         }px,0) rotateZ(${position.x / 5}deg)`;
-        console.log("mousmove", position);
       };
-      const mouseUpHandler = function(e) {
+      const mouseUpHandler = () => {
         window.removeEventListener("mousemove", mouseMoveHandler);
         if (position.x > 100) {
-          _this.removeHandler("right");
+          this.removeHandler("right");
           el.style.transition = "0s";
-          el.classList.add("cardsup");
         } else if (position.x < -100) {
-          _this.removeHandler("left");
+          this.removeHandler("left");
           el.style.transition = "0s";
-          el.classList.add("cardsup");
         } else if (
           (-50 <= position.x && position.x <= 50) ||
           (-50 <= position.y && position.y <= 50)
         ) {
           el.style.transition = `.5s all ease`;
         }
-        el.style.transform = ``;
-
+        el.style.transform = ``; // 关闭 style 属性样式，改为使用 css 样式
         position = { x: 0, y: 0 };
-
-        window.removeEventListener("mouseup", mouseUpHandler);
       };
 
-      this.$refs.cardItem[0].addEventListener("mousedown", function(e) {
-        this.classList.remove("cardsup");
+      this.$refs.cardItem[0].addEventListener("mousedown", function (e) {
+        [...this.parentNode.children].forEach((card) =>
+          card.classList.remove("cardsup")
+        );
         this.style.transition = `0s`;
         prevClientX = e.clientX;
         prevClientY = e.clientY;
 
         window.addEventListener("mousemove", mouseMoveHandler);
-
-        window.addEventListener("mouseup", mouseUpHandler);
+        window.addEventListener("mouseup", mouseUpHandler, { once: true });
       });
     },
 
     removeHandler(direction) {
-      this.$emit("removeCardHandler", {
+      this.$emit("onCardRemoved", {
         direction,
-        ...this.cardContentArray.splice(0, 1)[0]
+        ...this.cardContentArray.splice(0, 1)[0], // 删除并且获取
       });
-    }
-  }
+      !this.cardContentArray.length && this.$emit("onCardCleared");
+
+      this.$nextTick(() => {
+        this.$refs.cardItem[0]?.classList.add("cardsup");
+        this.mouseDownHandler();
+      });
+    },
+  },
 };
 </script>
 <style scoped>
@@ -128,7 +114,6 @@ export default {
   transform: translateY(0);
   transform-origin: 50% 100%;
 }
-
 .vue-slidecards-item:nth-child(1) {
   top: 0px;
   z-index: 99;
@@ -157,11 +142,12 @@ export default {
 }
 
 .cardsup {
-  animation: removeCard 0.3s ease 1;
+  animation: removeCard .3s ease 1;
 }
 
 @keyframes removeCard {
   from {
+    top: 18px;
     transform: scale(0.9, 0.9);
   }
   to {

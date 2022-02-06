@@ -20,8 +20,8 @@ Vue.use(SlideCard)
       :width="250"
       :height="400"
        :cardContentArray="arr"
-      @cardsEmptyHandler="cardsEmptyHandler"
-      @removeCardHandler="removeCardHandler"
+      @onCardCleared="cardsClearedHandler"
+      @onCardRemoved="cardRemovedHandler"
       >
     
       <template slot-scope="data">
@@ -72,7 +72,7 @@ export default {
 # 回调事件：
 |事件名称|触发时间|回调参数|
 |--|--|--|
-|cardEmtyHandler|卡片槽被划空后触发||
-|removeCardHandler|每次滑动出栈触发|removedCard|
+|onCardEmpty|卡片槽被划空后触发||
+|onCardRemoved|每次滑动出栈触发|removedCard|
 
 
